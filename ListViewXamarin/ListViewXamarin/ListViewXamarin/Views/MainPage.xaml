@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ListViewXamarin"
+             xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms" xmlns:data="clr-namespace:Syncfusion.DataSource;assembly=Syncfusion.DataSource.Portable"
+             x:Class="ListViewXamarin.MainPage">
+    <ContentPage.BindingContext>
+        <local:ContactsViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <local:Behavior/>
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:FooterVisibilityConverter x:Key="FooterVisibilityConverter"/>
+            <local:FooterTextConverter x:Key="FooterTextConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+	 <ContentPage.Content>
+        <StackLayout>
+            <syncfusion:SfListView x:Name="listView" AutoFitMode="DynamicHeight" ItemsSource="{Binding ContactsInfo}" DragStartMode="OnHold">
+                <syncfusion:SfListView.DataSource>
+                    <data:DataSource>
+                        <data:DataSource.GroupDescriptors>
+                            <data:GroupDescriptor PropertyName="ContactType"/>
+                        </data:DataSource.GroupDescriptors>
+                    </data:DataSource>
+                </syncfusion:SfListView.DataSource>
+                <syncfusion:SfListView.ItemTemplate >
+                    <DataTemplate>
+                        <StackLayout>
+                            <Grid x:Name="itemDetails">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding ContactImage}" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                                <Grid Grid.Column="1" RowSpacing="1" Padding="10,0,0,0" VerticalOptions="Center">
+                                    <Label LineBreakMode="NoWrap" TextColor="#474747" Text="{Binding ContactName}"/>
+                                    <Label Grid.Row="1" Grid.Column="0" TextColor="#474747" LineBreakMode="NoWrap" Text="{Binding ContactNumber}"/>
+                                </Grid>
+                            </Grid>
+                            <StackLayout x:Name="groupFooter" BackgroundColor="AliceBlue" IsVisible="{Binding ., Converter={StaticResource FooterVisibilityConverter}, ConverterParameter={x:Reference listView}}">
+                                <Label Text="{Binding ., Converter={StaticResource FooterTextConverter}, ConverterParameter={x:Reference listView}}" HeightRequest="30" BackgroundColor="Transparent" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+                <syncfusion:SfListView.DragItemTemplate>
+                    <DataTemplate>
+                        <Grid x:Name="dragItem">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ContactImage}" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                            <Grid Grid.Column="1" RowSpacing="1" Padding="10,0,0,0" VerticalOptions="Center">
+                                <Label LineBreakMode="NoWrap" TextColor="#474747" Text="{Binding ContactName}"/>
+                                <Label Grid.Row="1" Grid.Column="0" TextColor="#474747" LineBreakMode="NoWrap" Text="{Binding ContactNumber}"/>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </syncfusion:SfListView.DragItemTemplate>
+                <syncfusion:SfListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <StackLayout x:Name="groupHeader" BackgroundColor="#E4E4E4">
+                            <Label Text="{Binding Key}" FontSize="22" FontAttributes="Bold" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Margin="20,0,0,0" />
+                        </StackLayout>
+                    </DataTemplate>
+                </syncfusion:SfListView.GroupHeaderTemplate>
+            </syncfusion:SfListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
